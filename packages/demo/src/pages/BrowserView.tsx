@@ -26,7 +26,7 @@ export const Omnibox: Component = function (cx) {
         const entered = browserState.url.trim();
         const target = /^(https?:\/\/|about:)/i.test(entered)
             ? entered
-            : normalizeHomeUrl(entered.includes(".") ? entered : `https://www.google.com/search?q=${encodeURIComponent(entered)}`);
+            : normalizeHomeUrl(entered.includes(".") ? entered : `https://duckduckgo.com/?q=${encodeURIComponent(entered)}`);
         url = normalizeHomeUrl(target);
     } catch (e) {
         console.error("navigate failed:", e);
