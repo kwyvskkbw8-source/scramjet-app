@@ -23,7 +23,11 @@ export const Omnibox: Component = function (cx) {
 	const navigate = () => {
 	  let url: string;
     try {
-        url = normalizeHomeUrl(browserState.url);
+        const entered = browserState.url.trim();
+        const target = /^(https?:\/\/|about:)/i.test(entered)
+            ? entered
+            : normalizeHomeUrl(entered.includes(".") ? entered : `https://www.google.com/search?q=${encodeURIComponent(entered)}`);
+        url = normalizeHomeUrl(target);
     } catch (e) {
         console.error("navigate failed:", e);
         return;
@@ -69,6 +73,9 @@ export const Omnibox: Component = function (cx) {
 					class="url-input"
 					type="text"
 					value={use(browserState.url)}
+					on:input={(e: InputEvent) => {
+						browserState.url = (e.target as HTMLInputElement).value;
+					}}
 					spellcheck="false"
 					placeholder="Enter URL or search..."
 				/>
@@ -80,7 +87,6 @@ Omnibox.style = css`
 	:scope {
 		display: flex;
 		align-items: center;
-		/*padding: 0.25em 0.45em;*/
 		background: #0f0f0f;
 		border-bottom: 1px solid #2a2a2a;
 		min-width: 0;
